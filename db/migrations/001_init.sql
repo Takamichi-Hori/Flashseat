@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXSITS user (
+CREATE TABLE IF NOT EXISTS users (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
 
     firebase_uid TEXT NOT NULL UNIQUE,
@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS events (
       CHECK (capacity >= 0),
 
     reserved_count INT NOT NULL DEFAULT 0
-      CHECK () (researved_count >= 0),
+      CHECK (reserved_count >= 0),
 
     image_key TEXT,
 
@@ -60,4 +60,4 @@ CREATE INDEX IF NOT EXISTS idx_reservations_user_id
 ON reservations(user_id);
 
 CREATE INDEX IF NOT EXISTS idx_reservations_event_id
-ON reservation(event_id);
+ON reservations(event_id);

@@ -1,0 +1,31 @@
+services:
+
+  postgres:
+    image: postgres:17-alpine
+
+    environment:
+      POSTGRES_USER: flashseat
+      POSTGRES_PASSWORD: flashseat
+      POSTGRES_DB: flashseat
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./db/migrations/001_init.sql:/docker-entrypoint-initdb.d/001_init.sql:ro
+      - ./db/seed.sql:/docker-entrypoint-initdb.d/002_seed.sql:ro
+
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U flashseat -d flashseat"
+        ]
+
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  postgres_data:
