@@ -20,11 +20,10 @@ eventsRouter.get("/:id", async (req, res, next) => {
 
     try {
         const eventId = 
-          z.string()
-            .uuid()
-            .parse(
-                req.params.id
-            );
+          
+           z.uuid()
+            .parse(req.params.id);
+            
         const event = await getEvent(eventId);
 
         res.json({ event });
