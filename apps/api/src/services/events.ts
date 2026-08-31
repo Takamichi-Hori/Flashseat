@@ -31,3 +31,30 @@ export async function listEvents() {
         availableTickets: row.capacity - row.reserved_count
     }));
 }
+
+export async function getEvent(id: string) {
+
+    const result = await pool.query(`
+        SELECT
+          id,
+          title,
+          venue,
+          starts_at,
+          price_yen,
+          capacity,
+          reserved_count,
+          image_key
+        
+        FROM events
+        WHERE id = $1`,
+        [id]
+    );
+
+    if (!result.rowCount) {
+        throw new Error(
+            "event_not_found"
+        );
+    }
+
+    return result.rows[0]
+}

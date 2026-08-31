@@ -7,7 +7,9 @@
     "apps/web"
   ],
   "scripts": {
-    "dev": "docker compose up --build",
+    "dev": "docker compose up -d postgres && DATABASE_URL=postgresql://flashseat:flashseat@localhost:5432/flashseat npm run dev --workspace apps/api",
+    "dev:db": "docker compose up -d postgres",
+    "dev:api": "DATABASE_URL=postgresql://flashseat:flashseat@localhost:5432/flashseat npm run dev --workspace apps/api",
     "down": "docker compose down",
     "build": "npm run build --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
