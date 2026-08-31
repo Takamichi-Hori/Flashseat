@@ -1,16 +1,11 @@
 {
-  "name": "flashseat",
+  "name": "flashseat-v1",
+  "private": true,
   "version": "1.0.0",
-  "private": "true",
-  "worksspaces": [
-    "app/api",
-    "app/web"
+  "workspaces": [
+    "apps/api",
+    "apps/web"
   ],
-  "description": "",
-  "main": "index.js",
-  "directories": {
-    "doc": "docs"
-  },
   "scripts": {
     "dev": "docker compose up --build",
     "down": "docker compose down",
