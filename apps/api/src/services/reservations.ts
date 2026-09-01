@@ -1,7 +1,7 @@
 import { pool } from "../db.js";
 import { assertCanReserve } from "../domain/inventory.js";
 
-export async function createRservation(
+export async function createReservation(
     eventId: string,
     quantity: number,
     user: {
