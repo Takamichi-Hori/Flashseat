@@ -26,3 +26,18 @@ await signInWithPopup(
 );
 
 const token = await firebaseUser.getIdToken();
+
+fetch(`${API_URL}/api/reservations/events/${eventId}`,
+    {
+        method: "POST",
+
+        headers: {
+
+            "Content-Type": "application/json",
+
+            "Authorization": `Bearer ${token}`
+        },
+
+        body: JSON.stringify({ quantity })
+    }
+);
