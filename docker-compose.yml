@@ -16,16 +16,34 @@ services:
       - ./db/migrations/001_init.sql:/docker-entrypoint-initdb.d/001_init.sql:ro
       - ./db/seed.sql:/docker-entrypoint-initdb.d/002_seed.sql:ro
 
-    healthcheck:
-      test:
-        [
-          "CMD-SHELL",
-          "pg_isready -U flashseat -d flashseat"
-        ]
+    api:
 
-      interval: 5s
-      timeout: 5s
-      retries: 10
+      build:
+        ./apps/api
+
+      environment:
+        development:
+          NODE_ENV: development
+
+        PORT: 8080
+
+        DATABASE_URL: postgres://flashseat:flashseat@postgres:5432/flashseat
+
+        CORS_ORIGINS: http://localhost:3000
+
+      ports:
+        - "8080:8080"
+
+    web:
+
+      build:
+        ./apps/web
+
+      ports:
+        - "3000:3000"
+
+      depends_on:
+        - api
 
 volumes:
   postgres_data:

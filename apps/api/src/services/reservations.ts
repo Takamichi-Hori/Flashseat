@@ -124,3 +124,33 @@ export async function createReservation(
     client.release();
   }
 } 
+
+export async function listReservationsForUser( firebaseUid: string ) {
+
+    const result = await pool.query(`
+        
+        SELECT
+          r.id,
+          r.quantity,
+          r.created_at,
+          
+          e.id AS event_id,
+          e.title,
+          e.venue,
+          e.starts_at,
+          e.price_yen
+          
+        FROM reservations r
+        
+        JOIN users u ON u.id = r.user_id
+        
+        JOIN events e ON e.id = r.event_id
+        
+        WHERE u.firebase_uid = $1
+        
+        ORDER BY e.starts_at ASC
+        `, [firebaseUid]
+    );
+
+    return result.rows;
+}
