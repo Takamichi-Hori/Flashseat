@@ -20,24 +20,11 @@ export function firebaseAuth() {
 
 export const googleProvider = new GoogleAuthProvider();
 
-await signInWithPopup(
-    firebaseAuth(),
-    googleProvider
-);
+export async function signInWithGoogle() {
+    const result = await signInWithPopup(firebaseAuth(), googleProvider);
+    return result.user;
+}
 
-const token = await firebaseUser.getIdToken();
-
-fetch(`${API_URL}/api/reservations/events/${eventId}`,
-    {
-        method: "POST",
-
-        headers: {
-
-            "Content-Type": "application/json",
-
-            "Authorization": `Bearer ${token}`
-        },
-
-        body: JSON.stringify({ quantity })
-    }
-);
+export async function getToken() {
+    return firebaseAuth().currentUser?.getIdToken() ?? null;
+}

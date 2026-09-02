@@ -1,6 +1,7 @@
 import { app } from "./app.js";
+import { env } from "./config.js";
 
-const port = 8080;
+const port = env.PORT;
 
 app.listen(
     port,

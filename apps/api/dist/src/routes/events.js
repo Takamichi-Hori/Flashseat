@@ -1,11 +1,9 @@
-import { Router, type NextFunction, type Request, type Response } from "express";
+import { Router } from "express";
 import { createEvent, listEvents } from "../services/events.js";
 import { z } from "zod";
 import { getEvent } from "../services/events.js";
 import { requireAdmin, requireAuth } from "../middleware/auth.js";
-
 export const eventsRouter = Router();
-
 const newEventSchema = z.object({
     title: z.string().trim().min(1),
     venue: z.string().trim().min(1),
@@ -14,42 +12,33 @@ const newEventSchema = z.object({
     capacity: z.number().int().positive(),
     imageKey: z.string().trim().min(1).optional()
 });
-
-async function createEventHandler(req: Request, res: Response, next: NextFunction) {
+async function createEventHandler(req, res, next) {
     try {
         const event = await createEvent(newEventSchema.parse(req.body));
         res.status(201).json({ event });
-    } catch (error) {
+    }
+    catch (error) {
         next(error);
     }
 }
-
 eventsRouter.get("/", async (_req, res, next) => {
     try {
         const events = await listEvents();
-
         res.json({ events });
-    } catch (error) {
-        
+    }
+    catch (error) {
         next(error);
     }
 });
-
 eventsRouter.get("/:id", async (req, res, next) => {
-
     try {
-        const eventId = 
-          
-           z.uuid()
+        const eventId = z.uuid()
             .parse(req.params.id);
-            
         const event = await getEvent(eventId);
-
         res.json({ event });
-    } catch (error) {
-        
+    }
+    catch (error) {
         next(error);
     }
 });
-
 eventsRouter.post("/", requireAuth, requireAdmin, createEventHandler);

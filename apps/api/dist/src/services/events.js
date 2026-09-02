@@ -1,8 +1,5 @@
 import { pool } from "../db.js";
-
-
 export async function listEvents() {
-
     const result = await pool.query(`
         SELECT
           id,
@@ -18,9 +15,7 @@ export async function listEvents() {
 
         ORDER BY starts_at ASC
         `);
-    
     return result.rows.map(row => ({
-        
         id: row.id,
         title: row.title,
         venue: row.venue,
@@ -31,9 +26,7 @@ export async function listEvents() {
         availableTickets: row.capacity - row.reserved_count
     }));
 }
-
-export async function getEvent(id: string) {
-
+export async function getEvent(id) {
     const result = await pool.query(`
         SELECT
           id,
@@ -46,46 +39,26 @@ export async function getEvent(id: string) {
           image_key
         
         FROM events
-        WHERE id = $1`,
-        [id]
-    );
-
+        WHERE id = $1`, [id]);
     if (!result.rowCount) {
-        throw new Error(
-            "event_not_found"
-        );
+        throw new Error("event_not_found");
     }
-
-    return result.rows[0]
+    return result.rows[0];
 }
-
-export type NewEvent = {
-    title: string;
-    venue: string;
-    startsAt: string;
-    priceYen: number;
-    capacity: number;
-    imageKey?: string;
-};
-
-export async function createEvent(event: NewEvent) {
-    const result = await pool.query(
-        `INSERT INTO events (
+export async function createEvent(event) {
+    const result = await pool.query(`INSERT INTO events (
             title, venue, starts_at, price_yen, capacity, image_key
         ) VALUES ($1, $2, $3, $4, $5, $6)
         RETURNING
             id, title, venue, starts_at, price_yen, capacity,
-            reserved_count, image_key`,
-        [
-            event.title,
-            event.venue,
-            event.startsAt,
-            event.priceYen,
-            event.capacity,
-            event.imageKey ?? null
-        ]
-    );
-
+            reserved_count, image_key`, [
+        event.title,
+        event.venue,
+        event.startsAt,
+        event.priceYen,
+        event.capacity,
+        event.imageKey ?? null
+    ]);
     const row = result.rows[0];
     return {
         id: row.id,

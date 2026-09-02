@@ -1,6 +1,6 @@
-const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = import.meta.env.VITE_API_URL ?? "http://localhost:8080";
 
-async function api<T>(
+export async function api<T>(
     path: string,
     options: RequestInit = {},
     token?: string | null
@@ -27,4 +27,32 @@ async function api<T>(
     }
 
     return body;
+}
+
+export type EventDetails = {
+    id: string;
+    title: string;
+    venue: string;
+    startsAt: string;
+    priceYen: number;
+    capacity: number;
+    availableTickets: number;
+};
+
+export async function getEvents() {
+    const response = await api<{ events: EventDetails[] }>("/api/events");
+    return response.events;
+}
+
+export async function getEvent(id: string) {
+    const response = await api<{ event: EventDetails }>(`/api/events/${id}`);
+    return response.event;
+}
+
+export function reserve(eventId: string, quantity: number, token: string) {
+    return api<{ reservation: { id: string } }>(
+        `/api/reservations/events/${eventId}`,
+        { method: "POST", body: JSON.stringify({ quantity }) },
+        token
+    );
 }
