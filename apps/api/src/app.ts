@@ -5,8 +5,11 @@ import { eventsRouter } from "./routes/events.js";
 import { reservationsRouter } from "./routes/reservations.js";
 import { requireAuth } from "./middleware/auth.js";
 import { env } from "./config.js";
+import { uploadsRouter } from "./routes/uploads.js";
 
 export const app = express();
+
+app.use("/api/uploads", uploadsRouter);
 
 app.use(helmet());
 

@@ -56,3 +56,62 @@ export function reserve(eventId: string, quantity: number, token: string) {
         token
     );
 }
+
+
+
+export async function getUploadUrl(
+  contentType: "image/jpeg" | "image/png" | "image/webp",
+  token: string
+) {
+  return api<{
+    uploadUrl: string;
+    imageKey: string;
+  }>(
+    "/api/uploads/presign",
+    {
+      method: "POST",
+      body: JSON.stringify({ contentType })
+    },
+    token
+  );
+}
+
+export async function uploadImage(
+  uploadUrl: string,
+  file: File
+) {
+  const response = await fetch(uploadUrl, {
+    method: "PUT",
+    headers: {
+      "Content-Type": file.type
+    },
+    body: file
+  });
+
+  if (!response.ok) {
+    throw new Error("Image upload failed");
+  }
+}
+
+export type NewEventInput = {
+  title: string;
+  venue: string;
+  startsAt: string;
+  priceYen: number;
+  capacity: number;
+  imageKey?: string;
+};
+
+export function createEvent(
+  event: NewEventInput,
+  token: string
+) {
+  return api<{ event: EventDetails }>(
+    "/api/events",
+    {
+      method: "POST",
+      body: JSON.stringify(event)
+    },
+    token
+  );
+}
