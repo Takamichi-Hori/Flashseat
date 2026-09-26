@@ -30,13 +30,15 @@ export async function api<T>(
 }
 
 export type EventDetails = {
-    id: string;
-    title: string;
-    venue: string;
-    startsAt: string;
-    priceYen: number;
-    capacity: number;
-    availableTickets: number;
+  id: string;
+  title: string;
+  venue: string;
+  startsAt: string;
+  priceYen: number;
+  capacity: number;
+  availableTickets: number;
+  imageKey?: string | null;
+  imageUrl?: string | null;
 };
 
 export async function getEvents() {

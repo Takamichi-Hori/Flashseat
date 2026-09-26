@@ -37,6 +37,19 @@ export function EventDetailPage() {
 
     return (
         <main>
+            {event.imageUrl && (
+              <img
+                src={event.imageUrl}
+                alt={event.title}
+                style={{
+                  width: "100%",
+                  maxWidth: "700px",
+                  maxHeight: "450px",
+                  objectFit: "cover",
+                  borderRadius: "12px"
+                }}
+              />
+            )}
             <h1>{event.title}</h1>
             <p>{event.venue}</p>
             <p>{event.availableTickets} tickets left</p>

@@ -24,9 +24,23 @@ export function EventsPage() {
                 {events.map(event => (
                     <Link key={event.id} to={`/events/${event.id}`}>
                         <article>
-                            <h2>{event.title}</h2>
-                            <p>{event.venue}</p>
-                            <p>{event.availableTickets} tickets left</p>
+                          {event.imageUrl && (
+                            <img
+                              src={event.imageUrl}
+                              alt={event.title}
+                              style={{
+                                width: "100%",
+                                maxHeight: "260px",
+                                objectFit: "cover",
+                                borderRadius: "8px"
+                              }}
+                            /> 
+                          )}
+
+  <h2>{event.title}</h2>
+  <p>{event.venue}</p>
+  <p>¥{event.priceYen.toLocaleString()}</p>
+  <p>{event.availableTickets} tickets left</p>
                         </article>
                     </Link>
                 ))}
