@@ -9,8 +9,6 @@ import { uploadsRouter } from "./routes/uploads.js";
 
 export const app = express();
 
-app.use("/api/uploads", uploadsRouter);
-
 app.use(helmet());
 
 app.use(cors({
@@ -18,6 +16,8 @@ app.use(cors({
 }));
 
 app.use(express.json());
+
+app.use("/api/uploads", uploadsRouter);
 
 app.use( "/api/events", eventsRouter );
 app.use("/api/reservations", requireAuth, reservationsRouter);
